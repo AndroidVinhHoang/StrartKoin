@@ -1,9 +1,8 @@
 package com.example.startkoin.repository
 
-import com.example.startkoin.model.ListGenres
+import com.example.startkoin.model.Genres
 import io.reactivex.Observable
-import io.reactivex.Observer
 
 interface Repo {
-    fun get(): Observable<ListGenres>
+    fun get(): Observable<Genres>
 }

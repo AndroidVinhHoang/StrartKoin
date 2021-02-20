@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
     val viewModelModule = module {
         viewModel {
-            GenresViewModel(get())
+            GenresViewModel(RepoIpm(get()))
         }
     }
     val repoModule = module {
