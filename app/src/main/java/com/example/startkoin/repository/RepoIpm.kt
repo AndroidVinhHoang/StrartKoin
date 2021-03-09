@@ -50,7 +50,7 @@ class RepoIpm(private val githubService: API,
     }
 
     override fun loadBefore(params: LoadParams<Long>, callback: LoadCallback<Genres.Genres>) {
-
+         Log.d("dfsddsd","ddddddddddddddd")
     }
 
 }
