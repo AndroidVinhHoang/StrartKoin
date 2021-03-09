@@ -1,9 +1,9 @@
 package com.example.startkoin.model
 
 data class Genres(
-    val genres : List<Genres>
+    val results : List<Genres>
 ) {
     data class Genres(
-    val id: Int,
-    val name: String)
+        val id: Long = 0L,
+        var title: String = "")
 }
