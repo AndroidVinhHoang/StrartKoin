@@ -18,36 +18,4 @@ import io.reactivex.schedulers.Schedulers
 
 class GenresViewModel : ViewModel() {
 
-    var genresList: LiveData<PagedList<Genres.Genres>>
-
-    private val compositeDisposable = CompositeDisposable()
-
-    private val pageSize = 5
-
-    private val sourceFactory: GenresDataSourceFactory
-
-    init {
-        sourceFactory = GenresDataSourceFactory(ApiClient.getService(), compositeDisposable)
-        val config = PagedList.Config.Builder()
-            .setPageSize(pageSize)
-            .setInitialLoadSizeHint(pageSize * 2)
-            .setEnablePlaceholders(false)
-            .build()
-        genresList = LivePagedListBuilder<Long, Genres.Genres>(sourceFactory, config).build()
-    }
-
-    fun getLoading() = Transformations.switchMap<RepoIpm, Boolean>(
-        sourceFactory.genres) { it.isLoading }
-
-    fun getRefreshState() = Transformations.switchMap<RepoIpm, Boolean>(
-        sourceFactory.genres) { it.isRefresh }
-
-    fun reset() {
-        sourceFactory.genres.value?.invalidate()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
-    }
 }
