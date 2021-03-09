@@ -1,7 +1,5 @@
 package com.example.startkoin.api
 
-import com.example.startkoin.repository.Repo
-import com.example.startkoin.repository.RepoIpm
 import com.example.startkoin.ui.GenresViewModel
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
@@ -13,72 +11,20 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+ class ApiClient{
+     companion object {
+         fun getService(): API{
+             val interceptor = HttpLoggingInterceptor()
+             interceptor.level = HttpLoggingInterceptor.Level.BODY
+             val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
-    val viewModelModule = module {
-        viewModel {
-            GenresViewModel(RepoIpm(get()))
-        }
-    }
-    val repoModule = module {
-        single {
-            RepoIpm(get())
-        }
-    }
-    val apiModule = module {
-        fun provideApi(retrofit: Retrofit): API {
-            return retrofit.create(API::class.java)
-        }
-        single { provideApi(get()) }
-    }
-
-    val retrofitModule = module {
-        fun provideGson(): Gson {
-            return GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.IDENTITY).create()
-        }
-
-        fun provideHttpClient(): OkHttpClient {
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-            val client =
-                OkHttpClient.Builder().addInterceptor(interceptor).build()
-            return client
-        }
-
-        fun provideRetrofit(factory: Gson, client: OkHttpClient): Retrofit {
-            return Retrofit.Builder()
-                .baseUrl("https://api.themoviedb.org/3/genre/movie/")
-                .addConverterFactory(GsonConverterFactory.create(factory))
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(client)
-                .build()
-        }
-        single { provideGson() }
-        single { provideHttpClient() }
-        single { provideRetrofit(get(), get()) }
-    }
-
-
-    /*
-    companion object {
-        private const val URL = ""
-        private val apiInterface: API? = null
-        fun getMovieService(): API {
-            if (apiInterface != null) {
-                return apiInterface
-            }
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-            val client =
-                OkHttpClient.Builder().addInterceptor(interceptor).build()
-            val retrofit = Retrofit.Builder()
-                .baseUrl(URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-            return retrofit.create(API::class.java)
-        }
-    }
-
-     */
+             val retrofit = Retrofit.Builder()
+                 .baseUrl("https://api.themoviedb.org/3/")
+                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                 .addConverterFactory(GsonConverterFactory.create())
+                 .client(client)
+                 .build()
+             return retrofit.create(API::class.java)
+         }
+     }
+ }
